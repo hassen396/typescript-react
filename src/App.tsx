@@ -1,20 +1,11 @@
-import ListGroup from './Components/ListGroup';
-
+import Alert from "./Components/Alert";
 function App() {
-const items = [
-  'one',
-  'two',
-  'three',
-  'four'    
-];
   return (
     <>
-      <ListGroup items={items} heading='Numbers' onSelectItem={handleSelectItem} />
+      <span className="bg-primary text-secondary"> bg-primary</span>
+      <Alert text="hello world" />
     </>
-  )
-  function handleSelectItem(item: string){
-    console.log(item)
-  }
+  );
 }
 
-export default App
+export default App;
