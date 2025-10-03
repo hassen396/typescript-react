@@ -1,24 +1,11 @@
-import { useState } from "react";
-import Alert from "./Components/Alert";
-import Button from "./Components/Button";
+import Like from "./Components/Like";
 
 function App() {
-  const [isHidden, setIsHidden] = useState(true);
   return (
-    <div className="flex flex-col items-center mt-5">
-        {!isHidden && <Alert onClose={handleAlert}> Hiii </Alert>}
-      <Button
-        onClick={() => {
-          if(isHidden)
-          handleAlert();
-        }}>
-        click me
-      </Button>
+    <div className="flex flex-col w-full min-h-screen items-center mt-5 bg-secondary">
+       <Like />
     </div>
   );
-  function handleAlert() {
-    setIsHidden(!isHidden);
-  }
 }
 
 export default App;
