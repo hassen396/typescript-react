@@ -1,28 +1,22 @@
-import { useState } from "react";
+import ExpandableText from "./Components/ExpandableText";
 
 function App() {
-  const [cart, setCart] = useState({
-    discount: 0.1,
-    items: [
-      { id: 1, title: "Product 1", quantity: 1 },
-      { id: 2, title: "Product 2", quantity: 1 },
-    ],
-  });
-  function handleClick(id: number) {
-    setCart({
-      ...cart,
-      items: cart.items.map((item) =>
-        item.id === id ? {...item, quantity: item.quantity++} : item
-      ),
-    });
-  }
   return (
     <div className="flex flex-col w-full min-h-screen items-center mt-5 bg-secondary">
-      <button
-        className="bg-blue-500 rounded-xl px-2 py-1 active:scale-95"
-        onClick={() => handleClick(1)}>
-        +
-      </button>
+      <ExpandableText maxChars={140}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
+        explicabo optio porro incidunt beatae maiores necessitatibus ratione
+        reiciendis temporibus quasi. Recusandae quae necessitatibus aut. Aut
+        cumque porro molestias repellendus velit iusto fugiat atque ducimus
+        perspiciatis odit vel, quam facere, doloremque itaque, voluptate neque
+        nesciunt quos tempora sunt repudiandae. Nesciunt, modi. Nihil, accusamus
+        minima laborum animi vitae neque cupiditate at distinctio possimus,
+        beatae sapiente tenetur sint quaerat velit dolores sequi fugiat
+        inventore ea recusandae quis libero, architecto voluptates consectetur
+        eos. Impedit, dolorem, quasi perferendis asperiores numquam nobis
+        voluptatibus at quos repellat in quis aut. Cupiditate ad expedita vero
+        sed doloremque impedit!
+      </ExpandableText>
     </div>
   );
 }
