@@ -1,40 +1,60 @@
-import { useRef, type FormEvent } from "react";
+import { useForm, type FieldValues } from "react-hook-form";
 
+interface formData {
+  name: string;
+  age: number;
+}
 const Form = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const ageRef = useRef<HTMLInputElement>(null);
-  const person = { name: "", age: 0 };
-  console.log(person)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<formData>();
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    if (nameRef.current !== null && ageRef.current !== null) {
-      
-      person.name = nameRef.current.value;
-      person.age = parseInt(ageRef.current.value);
-      console.log(person.age, 'age')
-    }
-    console.log(person)
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
   };
   return (
-    <form onSubmit={handleSubmit} onReset={() => console.log("resseted")}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
-        <label htmlFor="name" className="">
+        <label htmlFor="name" className="m-2">
           Name
         </label>
-        <input ref={nameRef} id="name" type="text" className="" />
+        <input
+          {...register("name", { minLength: 3, required: true })}
+          id="name"
+          type="text"
+          className=""
+        />
+        {errors.name?.type === "required" && (
+          <p className="text-destructive">Name is required</p>
+        )}
+        {errors.name?.type === "minLength" && (
+          <p className="text-destructive">
+            Name must be at least 3 charachters
+          </p>
+        )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="age" className="">
+        <label htmlFor="age" className="m-3">
           Age
         </label>
-        <input ref={ageRef} id="age" type="number" className="" />
+        <input
+          {...register("age", { required: true, min: 18, max: 100 })}
+          id="age"
+          type="number"
+          className=""
+        />
+        {errors.age?.type === "required" && (
+          <p className="text-destructive">age is required</p>
+        )}
+        {errors.age?.type === "min" && (
+          <p className="text-destructive">Age must be at least 18</p>
+        )}
       </div>
+
       <button className="bg-amber-200 px-2 rounded-xl block" type="submit">
-        Submit
-      </button>
-      <button className="bg-amber-200 px-2 rounded-xl block" type="reset">
         Submit
       </button>
     </form>
