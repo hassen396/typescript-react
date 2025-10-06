@@ -1,60 +1,71 @@
-import { useForm, type FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface formData {
-  name: string;
-  age: number;
-}
+const schema = z.object({
+  name: z
+    .string()
+    .min(2, { error: "Name must be at least 2 charachters long!" }),
+  age: z
+    .number({ error: "Age filed is required" })
+    .min(12, { message: "Age can't be least than 12" }),
+});
+type FormData = z.infer<typeof schema>;
+// interface formData {
+//   name: string;
+//   age: number;
+// }
 const Form = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<formData>();
+    formState: { errors, isValid },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = (data: FormData) => {
     console.log(data);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
-        <label htmlFor="name" className="m-2">
+        <label
+          htmlFor="name"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Name
         </label>
         <input
-          {...register("name", { minLength: 3, required: true })}
+          placeholder="write your name"
+          {...register("name")}
           id="name"
           type="text"
-          className=""
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        {errors.name?.type === "required" && (
-          <p className="text-destructive">Name is required</p>
-        )}
-        {errors.name?.type === "minLength" && (
-          <p className="text-destructive">
-            Name must be at least 3 charachters
-          </p>
+        {errors.name && (
+          <p className="text-destructive">{errors.name.message}</p>
         )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="age" className="m-3">
+        <label
+          htmlFor="age"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Age
         </label>
         <input
-          {...register("age", { required: true, min: 18, max: 100 })}
+          min={1}
+          max={100}
+          {...register("age", { valueAsNumber: true })}
           id="age"
           type="number"
-          className=""
+          className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        {errors.age?.type === "required" && (
-          <p className="text-destructive">age is required</p>
-        )}
-        {errors.age?.type === "min" && (
-          <p className="text-destructive">Age must be at least 18</p>
-        )}
+        {errors.age && <p className="text-destructive">{errors.age.message}</p>}
       </div>
 
-      <button className="bg-amber-200 px-2 rounded-xl block" type="submit">
+      <button
+        disabled={!isValid}
+        className="bg-amber-200 px-2 rounded-xl block"
+        type="submit">
         Submit
       </button>
     </form>
